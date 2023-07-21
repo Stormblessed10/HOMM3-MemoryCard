@@ -1,7 +1,10 @@
+import { useCards } from "../context/CardsContext";
 import { CardItem } from "./CardItem";
 
-export function CardList({ collection, onCardClick }) {
+export function CardList() {
+  const { levelCards } = useCards();
+
   return <ul className="cards">
-    {collection.map(card => <CardItem key={card.name} card={card} onCardClick={onCardClick} />)}
+    {levelCards.map(card => <CardItem key={card.name} card={card} />)}
   </ul>;
 }
