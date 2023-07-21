@@ -21,8 +21,12 @@ function reducer(state, action) {
             return {...state, isLoading: true};
         case "started":
             return {...initialState, isMenuOpen: false, best: state.best, levelCards: action.payload};
-        case "pickedRight":
-            return {...state, clicked: [state.clicked, action.payload], levelCards: action.payload, score: state.score + 1, best: state.score > state.best ? state.score : state.best};
+        case "clickedRight":
+            return {...state, clicked: [...state.clicked, action.payload], score: state.score + 1, best: state.score > state.best ? state.score : state.best};
+        case "shuffleCards":
+            return {...state, levelCards: action.payload};
+        case "clickedWrong":
+            return {...state, isMenuOpen: true};
         case "fetchCards":
             return {...state, allCards: action.payload, isLoading: false};
         case "fetchFact":
@@ -72,17 +76,6 @@ export function CardsProvider({ children }) {
         }
     }
 
-    function shuffle(arr) {
-        const newArr = arr;
-        for (let i = newArr.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            const temp = newArr[j];
-            newArr[j] = newArr[i];
-            newArr[i] = temp;
-        }
-        return newArr;
-    }
-
     function uniqueCards() {
         const uniqueIndexes = new Set();
         while (uniqueIndexes.size !== 4 * level) {
@@ -91,11 +84,11 @@ export function CardsProvider({ children }) {
         return Array.from(uniqueIndexes, (i) => allCards[i]);
     }
 
-    return <CardsContext.Provider value={{level, allCards, levelCards, clicked, score, best, fact, error, isLoading, isMenuOpen, winScore: WIN_SCORE, getFact, dispatch, uniqueCards, shuffle}}>{children}</CardsContext.Provider>
+    return <CardsContext.Provider value={{level, allCards, levelCards, clicked, score, best, fact, error, isLoading, isMenuOpen, winScore: WIN_SCORE, getFact, dispatch, uniqueCards}}>{children}</CardsContext.Provider>
 }
 
 export function useCards() {
-    const value = useContext(CardsProvider);
+    const value = useContext(CardsContext);
     if (value === undefined) throw new Error("Context was used outside the provider");
     return value;
 }
