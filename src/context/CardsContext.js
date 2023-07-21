@@ -1,4 +1,4 @@
-import { createContext, useEffect, useReducer } from "react";
+import { createContext, useContext, useEffect, useReducer } from "react";
 
 const CardsContext = createContext();
 
@@ -92,4 +92,10 @@ export function CardsProvider({ children }) {
       }
 
     return <CardsContext.Provider value={{level, allCards, levelCards, clicked, score, best, fact, error, isLoading, isMenuOpen, winScore: WIN_SCORE, getFact, dispatch}}>{children}</CardsContext.Provider>
+}
+
+export function useCards() {
+    const value = useContext(CardsProvider);
+    if (value === undefined) throw new Error("Context was used outside the provider");
+    return value;
 }
