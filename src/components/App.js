@@ -1,4 +1,3 @@
-import { CardList } from "./CardList";
 import { Header } from "./Header";
 import { Main } from "./Main";
 import { CardsProvider } from "../context/CardsContext";
