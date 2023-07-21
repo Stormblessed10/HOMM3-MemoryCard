@@ -9,7 +9,7 @@ const initialState = {
     clicked: [],
     score: 0,
     best: 0,
-    randomFact: "",
+    fact: "",
     error: "",
     isLoading: false,
     isMenuOpen: true,
@@ -42,8 +42,10 @@ function reducer(state, action) {
             return {...initialState, isMenuOpen: false, best: state.best, levelCards: action.payload};
         case "pickedRight":
             return {...state, clicked: [state.clicked, action.payload], levelCards: action.payload, score: state.score + 1, best: state.score > state.best ? state.score : state.best};
-        case "fetchedCards":
+        case "fetchCards":
             return {...state, allCards: action.payload, isLoading: false};
+        case "fetchFact":
+            return {...state, fact: action.payload, isLoading: false};
         case "rejected":
             return {...state, error: action.payload, isLoading: false};
         default:
@@ -51,7 +53,8 @@ function reducer(state, action) {
     }
 }
 
-const URL = "http://localhost:8000/cards";
+const URL_CARDS = "http://localhost:8000/cards";
+const URL_FACTS = "https://api.api-ninjas.com/v1/facts?limit=1";
 
 export function CardsProvider({ children }) {
     const {cardes, dispatch} = useReducer(reducer, initialState);
@@ -61,14 +64,29 @@ export function CardsProvider({ children }) {
             dispatch({type: "loaded"});
 
             try {
-                const res = await fetch(URL);
+                const res = await fetch(URL_CARDS);
                 const data = await res.json();
-                dispatch({type: "fetchedCards", payload: data});
+                dispatch({type: "fetchCards", payload: data});
             } catch(err) {
                 dispatch({type: "rejected", payload: err});
             }
         }
       }, []);
+
+      async function getFact() {
+        dispatch({type: "loaded"});
+        
+        try {
+            const res = await fetch(URL_FACTS, {
+                method: 'GET',
+                headers: { 'x-api-key': 'zKIE1l5vAdRj8Vpwz2Fy/A==c8NXBESJJrtxguKo' }
+            });
+            const data = await res.json();
+            dispatch({type: "fetchFact", payload: data[0].fact});
+        } catch(err) {
+            dispatch({type: "rejected", payload: err});
+        }
+      }
 
     return <CardsContext.Provider>{children}</CardsContext.Provider>
 }
