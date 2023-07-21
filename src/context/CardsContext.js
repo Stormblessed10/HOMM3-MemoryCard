@@ -46,6 +46,8 @@ function reducer(state, action) {
             return {...state, allCards: action.payload, isLoading: false};
         case "fetchFact":
             return {...state, fact: action.payload, isLoading: false};
+        case "won":
+            return {...state, isMenuOpen: true};
         case "rejected":
             return {...state, error: action.payload, isLoading: false};
         default:
@@ -55,9 +57,10 @@ function reducer(state, action) {
 
 const URL_CARDS = "http://localhost:8000/cards";
 const URL_FACTS = "https://api.api-ninjas.com/v1/facts?limit=1";
+const WIN_SCORE = 6;
 
 export function CardsProvider({ children }) {
-    const {cardes, dispatch} = useReducer(reducer, initialState);
+    const [{level, allCards, levelCards, clicked, score, best, fact, error, isLoading, isMenuOpen}, dispatch] = useReducer(reducer, initialState);
     
       useEffect(() => {
         async function getCards() {
@@ -88,5 +91,5 @@ export function CardsProvider({ children }) {
         }
       }
 
-    return <CardsContext.Provider>{children}</CardsContext.Provider>
+    return <CardsContext.Provider value={{level, allCards, levelCards, clicked, score, best, fact, error, isLoading, isMenuOpen, winScore: WIN_SCORE, getFact, dispatch}}>{children}</CardsContext.Provider>
 }
