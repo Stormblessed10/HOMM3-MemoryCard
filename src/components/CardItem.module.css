@@ -6,14 +6,26 @@
     transition: all 400ms cubic-bezier(0.03, 0.98, 0.52, 0.99) 0s;
     border-radius: 16px;
     overflow: hidden;
+    animation: card-apperance 2s;
 }
 
 .card img {
     height: 27rem;
     width: 19rem;
 }
-  
-.card .card__frame {
+
+.card .frame {
     position: absolute;
     left: 0;
+}
+
+@keyframes card-apperance {
+    0% {
+        transform: scale(0%);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(100%);
+        opacity: 100;
+    }
 }
