@@ -1,5 +1,7 @@
+import styles from "./Modal.module.css";
+
 export default function Modal({onButton}) {
-    return <ul className="modal">
+    return <ul className={styles.modal}>
         <li>To get a point, you need to choose a card.</li>
         §
         <li>You cannot choose the same card twice per level.</li>
