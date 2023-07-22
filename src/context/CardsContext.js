@@ -48,7 +48,7 @@ function reducer(state, action) {
 
 const URL_CARDS = "http://localhost:8000/cards";
 const URL_FACTS = "https://api.api-ninjas.com/v1/facts?limit=1";
-const WIN_SCORE = 6;
+const WIN_SCORE = 60;
 
 export function CardsProvider({ children }) {
     const [{stage, level, levelCards, clicked, score, best, fact, error, isLoading}, dispatch] = useReducer(reducer, initialState);
