@@ -1,10 +1,10 @@
 import { createContext, useContext, useEffect, useReducer } from "react";
+import { act } from "react-dom/test-utils";
 
 const CardsContext = createContext();
 
 const initialState = {
     level: 1,
-    allCards: [],
     levelCards: [],
     clicked: [],
     score: 0,
@@ -20,15 +20,16 @@ function reducer(state, action) {
         case "loaded":
             return {...state, isLoading: true};
         case "started":
-            return {...initialState, isMenuOpen: false, best: state.best, levelCards: action.payload};
+            return {...initialState, isMenuOpen: false, best: state.best, levelCards: state.levelCards};
         case "clickedRight":
-            return {...state, clicked: [...state.clicked, action.payload], score: state.score + 1, best: state.score > state.best ? state.score : state.best};
-        case "shuffleCards":
-            return {...state, levelCards: action.payload};
+            const { card, shuffle } = action.payload;
+            return {...state, clicked: [...state.clicked, card], score: state.score + 1, best: state.score >= state.best ? state.best + 1 : state.best, levelCards: shuffle};
+        case "levelUp":
+            return {...state, level: state.level + 1, clicked: []};
         case "clickedWrong":
             return {...state, isMenuOpen: true};
         case "fetchCards":
-            return {...state, allCards: action.payload, isLoading: false};
+            return {...state, levelCards: action.payload, isLoading: false};
         case "fetchFact":
             return {...state, fact: action.payload, isLoading: false};
         case "won":
@@ -45,21 +46,29 @@ const URL_FACTS = "https://api.api-ninjas.com/v1/facts?limit=1";
 const WIN_SCORE = 6;
 
 export function CardsProvider({ children }) {
-    const [{level, allCards, levelCards, clicked, score, best, fact, error, isLoading, isMenuOpen}, dispatch] = useReducer(reducer, initialState);
+    const [{level, levelCards, clicked, score, best, fact, error, isLoading, isMenuOpen}, dispatch] = useReducer(reducer, initialState);
     
     useEffect(() => {
-    async function getCards() {
-        dispatch({type: "loaded"});
-
-        try {
-            const res = await fetch(URL_CARDS);
-            const data = await res.json();
-            dispatch({type: "fetchCards", payload: data});
-        } catch(err) {
-            dispatch({type: "rejected", payload: err});
+        function uniqueCards(cards, level) {
+            const uniqueIndexes = new Set();
+            while (uniqueIndexes.size !== 4 * level) {
+                uniqueIndexes.add(Math.floor(Math.random() * cards.length));
+            }
+            return Array.from(uniqueIndexes, (i) => cards[i]);
         }
-    }
-    }, []);
+        async function getCards() {
+            dispatch({type: "loaded"});
+
+            try {
+                const res = await fetch(URL_CARDS);
+                const data = await res.json();
+                dispatch({type: "fetchCards", payload: uniqueCards(data, level)});
+            } catch(err) {
+                dispatch({type: "rejected", payload: err});
+            }
+        }
+        getCards();
+    }, [level]);
 
     async function getFact() {
         dispatch({type: "loaded"});
@@ -76,15 +85,7 @@ export function CardsProvider({ children }) {
         }
     }
 
-    function uniqueCards() {
-        const uniqueIndexes = new Set();
-        while (uniqueIndexes.size !== 4 * level) {
-            uniqueIndexes.add(Math.floor(Math.random() * allCards.length));
-        }
-        return Array.from(uniqueIndexes, (i) => allCards[i]);
-    }
-
-    return <CardsContext.Provider value={{level, allCards, levelCards, clicked, score, best, fact, error, isLoading, isMenuOpen, winScore: WIN_SCORE, getFact, dispatch, uniqueCards}}>{children}</CardsContext.Provider>
+    return <CardsContext.Provider value={{level, levelCards, clicked, score, best, fact, error, isLoading, isMenuOpen, winScore: WIN_SCORE, getFact, dispatch}}>{children}</CardsContext.Provider>
 }
 
 export function useCards() {
