@@ -1,0 +1,5 @@
+.message {
+    font-size: var(--font-md);
+    width: 100%;
+    color: var(--secondary-color);
+}
