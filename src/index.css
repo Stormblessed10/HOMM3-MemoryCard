@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 
 :root {
-  --primary-color: #4d4b4b;
+  --primary-color: #33332d;
   --secondary-color: #dee2e6;
   --tertiary-color: #080707;
   --border: 2px solid var(--secondary-color);
@@ -23,7 +23,7 @@ html {
 body {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 1.6rem;
-  background: #33332d;;
+  background: var(--primary-color);
   min-height: 100vh;
 }
 
