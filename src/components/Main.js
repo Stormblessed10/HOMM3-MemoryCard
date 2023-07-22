@@ -5,11 +5,11 @@ import Spinner from "./Spinner";
 import styles from "./Main.module.css";
 
 export function Main() {
-  const {isMenuOpen, isLoading} = useCards();
+  const {isLoading, stage} = useCards();
 
   return <main className={styles.main}>
-    {isMenuOpen && <Menu/>}
-    {!isMenuOpen && (!isLoading ? <>
+    {stage !== "playing" && <Menu/>}
+    {stage === "playing" && (!isLoading ? <>
     <blockquote className={styles.message}>Hello</blockquote>
     <CardList/>
     </> : <Spinner/>)}

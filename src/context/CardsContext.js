@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect, useReducer } from "react";
-import { act } from "react-dom/test-utils";
 
 const CardsContext = createContext();
 
@@ -12,7 +11,8 @@ const initialState = {
     fact: "",
     error: "",
     isLoading: false,
-    isMenuOpen: true,
+    // won, lost, playing
+    stage: "default"
 }
 
 function reducer(state, action) {
@@ -20,20 +20,24 @@ function reducer(state, action) {
         case "loaded":
             return {...state, isLoading: true};
         case "started":
-            return {...initialState, isMenuOpen: false, best: state.best, levelCards: state.levelCards};
+            return {...initialState, best: state.best, levelCards: state.levelCards, stage: "playing"};
         case "clickedRight":
             const { card, shuffle } = action.payload;
-            return {...state, clicked: [...state.clicked, card], score: state.score + 1, best: state.score >= state.best ? state.best + 1 : state.best, levelCards: shuffle};
-        case "levelUp":
-            return {...state, level: state.level + 1, clicked: []};
+            const win = WIN_SCORE === state.score + 1 ? "won" : {};
+            const levelUp = state.level * 4 === state.clicked.length + 1 ? {...state, level: state.level + 1, clicked: []} : {};
+            return {...state, clicked: [...state.clicked, card],
+                score: state.score + 1,
+                best: state.score >= state.best ? state.best + 1 : state.best,
+                levelCards: shuffle,
+                stage: win,
+                ...levelUp
+            };
         case "clickedWrong":
-            return {...state, isMenuOpen: true};
+            return {...state, stage: "lost"};
         case "fetchCards":
             return {...state, levelCards: action.payload, isLoading: false};
         case "fetchFact":
             return {...state, fact: action.payload, isLoading: false};
-        case "won":
-            return {...state, isMenuOpen: true};
         case "rejected":
             return {...state, error: action.payload, isLoading: false};
         default:
@@ -46,7 +50,7 @@ const URL_FACTS = "https://api.api-ninjas.com/v1/facts?limit=1";
 const WIN_SCORE = 6;
 
 export function CardsProvider({ children }) {
-    const [{level, levelCards, clicked, score, best, fact, error, isLoading, isMenuOpen}, dispatch] = useReducer(reducer, initialState);
+    const [{stage, level, levelCards, clicked, score, best, fact, error, isLoading}, dispatch] = useReducer(reducer, initialState);
     
     useEffect(() => {
         function uniqueCards(cards, level) {
@@ -85,7 +89,7 @@ export function CardsProvider({ children }) {
         }
     }
 
-    return <CardsContext.Provider value={{level, levelCards, clicked, score, best, fact, error, isLoading, isMenuOpen, winScore: WIN_SCORE, getFact, dispatch}}>{children}</CardsContext.Provider>
+    return <CardsContext.Provider value={{level, levelCards, clicked, score, best, fact, error, isLoading, winScore: WIN_SCORE, getFact, dispatch, stage}}>{children}</CardsContext.Provider>
 }
 
 export function useCards() {

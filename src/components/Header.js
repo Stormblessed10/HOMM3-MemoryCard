@@ -1,11 +1,12 @@
 import { useCards } from "../context/CardsContext";
+import styles from "./Header.module.css"
 
 export function Header() {
-  const { score, level, best, isMenuOpen } = useCards();
+  const { score, level, best, stage } = useCards();
 
-  return <header>
+  return <header className={styles.header}>
     <h1>Memory Game</h1>
-    {!isMenuOpen && <div className="stats">
+    {stage === "playing" && <div className={styles.stats}>
       <span>level: {level}</span>
       <span>score: {score}</span>
       <span>best: {best}</span>
