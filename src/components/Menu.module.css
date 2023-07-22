@@ -7,3 +7,14 @@
     width: 100%;
     color: var(--secondary-color);
 }
+
+.menu .stats {
+    display: flex;
+    gap: 2rem;
+  
+    & span {
+      border-radius: 50px;
+      padding: 1rem;
+      font-size: 3rem;
+    }
+}

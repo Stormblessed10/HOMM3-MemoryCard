@@ -30,17 +30,6 @@ main {
     animation: loading 0.5s steps(4) infinite;
 }
 
-.main .stats {
-    display: flex;
-    gap: 2rem;
-  
-    & span {
-      border-radius: 50px;
-      padding: 1rem;
-      font-size: 3rem;
-    }
-}
-
 @keyframes loading {
     0% {
       clip-path: inset(0 1.8rem 0 0);
