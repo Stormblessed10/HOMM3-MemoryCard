@@ -23,8 +23,9 @@ function reducer(state, action) {
             return {...initialState, best: state.best, levelCards: state.levelCards, stage: "playing"};
         case "clickedRight":
             const { card, shuffle } = action.payload;
-            const win = WIN_SCORE === state.score + 1 ? "won" : {};
-            const levelUp = state.level * 4 === state.clicked.length + 1 ? {...state, level: state.level + 1, clicked: []} : {};
+            const win = WIN_SCORE === state.score + 1 ? "won" : state.stage;
+            const levelUp = state.level * 4 === state.clicked.length + 1 ? { level: state.level + 1, clicked: []} : {};
+
             return {...state, clicked: [...state.clicked, card],
                 score: state.score + 1,
                 best: state.score >= state.best ? state.best + 1 : state.best,

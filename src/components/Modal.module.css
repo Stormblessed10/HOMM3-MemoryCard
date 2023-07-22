@@ -3,6 +3,7 @@
     padding: 3rem;
     background-color: var(--tertiary-color);
     position: absolute;
+    top: -5rem;
     width: 37rem;
     border: var(--border);
     font-size: 2rem;
