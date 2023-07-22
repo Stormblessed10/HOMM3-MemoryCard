@@ -90,7 +90,7 @@ export function CardsProvider({ children }) {
         }
     }
 
-    return <CardsContext.Provider value={{level, levelCards, clicked, score, best, fact, error, isLoading, winScore: WIN_SCORE, getFact, dispatch, stage}}>{children}</CardsContext.Provider>
+    return <CardsContext.Provider value={{level, levelCards, clicked, score, best, fact, isLoading, getFact, dispatch, stage}}>{children}</CardsContext.Provider>
 }
 
 export function useCards() {
