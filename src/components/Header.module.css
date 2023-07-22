@@ -8,8 +8,9 @@
 
 .header h1 {
     font-size: 4rem;
-    padding: 0.5rem;
+    padding: 0.5rem 1rem;
     position: relative;
+    background-color: var(--tertiary-color);
 
     &::before, &::after {
         z-index: 2;
@@ -34,11 +35,32 @@
 
 .header .stats {
     display: flex;
-    gap: 2rem;
+    gap: 3rem;
   
     & span {
       border-radius: 50px;
-      padding: 1rem;
-      font-size: 3rem;
+      padding: 0.5rem 1rem;
+      font-size: 2.5rem;
+      position: relative;
+
+        &::before, &::after {
+        z-index: 2;
+        content: "";
+        border: 2px solid #fff;
+        border-radius: 5px;
+        position: absolute;
+        width: calc(100% + 5px);
+        height: calc(100% + 5px);
+        }
+
+        &::before {
+            top: 0;
+            left: 0;
+        }
+
+        &::after {
+            bottom: 0;
+            right: 0;
+        }
     }
 }
