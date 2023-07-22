@@ -1,0 +1,19 @@
+.card {
+    position: relative;
+    list-style: none;
+    cursor: pointer;
+    will-change: transform;
+    transition: all 400ms cubic-bezier(0.03, 0.98, 0.52, 0.99) 0s;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.card img {
+    height: 27rem;
+    width: 19rem;
+}
+  
+.card .card__frame {
+    position: absolute;
+    left: 0;
+}
