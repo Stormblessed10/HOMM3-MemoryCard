@@ -4,7 +4,7 @@
   --primary-color: #4d4b4b;
   --secondary-color: #dee2e6;
   --tertiary-color: #080707;
-  --border: 2px solid #fff;
+  --border: 2px solid var(--secondary-color);
   --margin-sm: calc(var(--margin-md) / 2);
   --margin-md: 2rem;
   --margin-lg: calc(var(--margin-md) * 2.5);
@@ -23,7 +23,7 @@ html {
 body {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 1.6rem;
-  background: #5e5e34;
+  background: #33332d;;
   min-height: 100vh;
 }
 
